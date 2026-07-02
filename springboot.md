@@ -676,5 +676,106 @@ SpringApplication.run();
 - Bean Configuration = Defines Bean creation.
 - Spring Boot starts IoC using `SpringApplication.run()`.
 - `@Component`, `@Service`, `@Repository`, `@Controller` create Beans.
+---
+## Difference Between BeanFactory and ApplicationContext
+
+| Feature | BeanFactory | ApplicationContext |
+|----------|------------|-------------------|
+| Definition | Basic IoC Container | Advanced IoC Container |
+| Bean Loading | Lazy Loading | Eager Loading (Singleton Beans) |
+| Event Handling | Not Supported | Supported |
+| Internationalization (i18n) | Not Supported | Supported |
+| AOP Support | Limited | Full Support |
+| Annotation Support | Limited | Full Support |
+| Enterprise Usage | Rarely Used | Widely Used |
+| Recommendation | Not Preferred | Preferred |
+
+---
+
+## What is BeanFactory?
+
+BeanFactory is the simplest IoC Container in Spring.
+
+### Key Points
+- Creates and manages Beans.
+- Uses Lazy Loading.
+- Bean is created only when requested using `getBean()`.
+- Suitable for small applications.
+
+### Example
+
+```java
+BeanFactory factory =
+    new XmlBeanFactory(new ClassPathResource("beans.xml"));
+```
+
+---
+
+## What is ApplicationContext?
+
+ApplicationContext is an advanced version of BeanFactory.
+
+### Key Points
+- Creates and manages Beans.
+- Uses Eager Loading by default.
+- Supports events, annotations, AOP, and i18n.
+- Used in almost all Spring Boot applications.
+
+### Example
+
+```java
+ApplicationContext context =
+    new ClassPathXmlApplicationContext("beans.xml");
+```
+
+---
+
+## Lazy vs Eager Loading
+
+### BeanFactory
+
+Container Starts
+→ No Bean Created
+→ getBean()
+→ Bean Created
+
+### ApplicationContext
+
+Container Starts
+→ Bean Created
+→ Stored in Container
+→ getBean()
+→ Bean Returned
+
+---
+
+# Interview Answer
+
+BeanFactory is the basic IoC container that creates Beans lazily when they are requested.
+
+ApplicationContext is an advanced IoC container that creates singleton Beans during startup and provides additional features like event handling, internationalization, annotation support, and AOP.
+
+ApplicationContext is preferred in modern Spring and Spring Boot applications.
+
+---
+
+# Quick Revision
+
+- BeanFactory = Basic Container
+- ApplicationContext = Advanced Container
+- BeanFactory = Lazy Loading
+- ApplicationContext = Eager Loading
+- BeanFactory = Limited Features
+- ApplicationContext = Enterprise Features
+- Spring Boot uses ApplicationContext internally
+
+### NOTE - 
+- BeanFactory will follow lazy loading concept that means when we request then only it will create bean object.
+- ApplicationContext will follow Eager loading for singleton beans. for prototype beans it will also follow lazy loading
+- Spring bean default scope is Singleton.
+
+                1) Eager loading means creating objects for Spring Bean when IOC starts
+                2) Lazy Loading means creating object for Spring Bean when we call getBean() method.
+
 
 

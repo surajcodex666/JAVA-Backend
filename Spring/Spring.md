@@ -777,5 +777,126 @@ ApplicationContext is preferred in modern Spring and Spring Boot applications.
                 1) Eager loading means creating objects for Spring Bean when IOC starts
                 2) Lazy Loading means creating object for Spring Bean when we call getBean() method.
 
+# Setter Injection vs Constructor Injection (Bean Configuration File)
+
+## Setter Injection
+Spring injects dependency using the setter method after creating the object.
+
+### XML
+```xml
+<bean id="address" class="com.example.Address"/>
+<bean id="student" class="com.example.Student">
+    <property name="address" ref="address"/>
+</bean>
+```
+
+- Uses `<property>`
+- Dependency injected after object creation
+- Suitable for optional dependencies
+
+---
+
+## Constructor Injection
+Spring injects dependency through the constructor while creating the object.
+
+### XML
+```xml
+<bean id="address" class="com.example.Address"/>
+<bean id="student" class="com.example.Student">
+    <constructor-arg ref="address"/>
+</bean>
+```
+
+- Uses `<constructor-arg>`
+- Dependency injected during object creation
+- Suitable for mandatory dependencies
+
+---
+
+## Comparison
+
+| Setter Injection | Constructor Injection |
+|---|---|
+| Uses setter method | Uses constructor |
+| `<property>` | `<constructor-arg>` |
+| After object creation | During object creation |
+| Optional dependency | Mandatory dependency |
+| Mutable object | Can be immutable |
+| Less preferred | Recommended in Spring Boot |
+
+---
+
+## Easy Trick to Remember
+
+- **Setter** → **Set Later** → `<property>`
+- **Constructor** → **Construct First** → `<constructor-arg>`
+
+---
+
+## Interview Answer
+
+Use **Constructor Injection** when a dependency is mandatory because the object cannot be created without it.
+
+Use **Setter Injection** when a dependency is optional because it can be set after object creation.
+              
+## Bean scope - 
+- scope represents how many objects to be created for a Spring Bean
+- In Spring Framework we have below scopes 
+        
+        1) Singleton --> Default scope (if we dont define anything then that Spring Bean will become Singleton)
+        2) Prototype
+        3) Request
+        4) Session
+
+        - To represent bean scope we will use "scope" attribute
+
+        <bean id = "id" class = "pkg.classname" scope = "singleton|prototype|request|session" />
+
+- Singleton means only one object will be created for the class in IoC Container
+- Prototype scope means everytime new object will be created
+
+### NOTE - Request and session scopes are related to Web MVC Module.
+
+## Why Spring bean is by deault Singleton?
+- To save memory of JVM 
+        ex : Rest controller, Controllers ,Services and DAOs will be considered as singleton in the project
+
+## Autowiring 
+- We can perform DI in two ways 
+                1) Manual wiring
+                2) Auto-Wiring   
+
+- Manual wiring means programmer will inject dependent object into target object using <property/> tag or <constructor-arg/>    
+
+- Autowiring means IoC container will identify dependent bean and it will inject into target object (we no need to use any ref attribute)  
+- Autowiring will work based on below modes
+        1) byName
+        2) byType
+        3) constructor
+        4) no
+
+### NOTE - Autowiring will not work by default, we have to enable autowiring on target bean like below.
+
+        <bean id = "id" class = "pkg.Classname" auto-wire = "byName|byType|constructor|no />      
+        
+        1) byName - IoC will identify dependent bean based on bean id or bean name.
+
+        [jiss class ka variable name is matched with another class bean id then that classes obj will be injected and id will always be unique]
+
+        2) byType - IoC will identify dependent bean object based on data type of variable in the target class
+
+        [when there are two with same data type then we will have to give [autowire-candidate="true"] in which class we have to inject the object and in others we have to give autowire-candidate="false"]
+
+        <bean id = "id" class = "pkg.Classname" auto-wire = "byName|byType|constructor|no autowire-candidate="true" />  
+
+        --> If one interface have 2 implementations then there is a chance of getting Ambiguity Problen. To overcome that we need to use 
+                autowire-candidate="true" --> [consider this] autowire-candidate="false" --> [dont consider this for autowiring]
+
+        - by using <bean> tag we represent class as a spring bean
+
+        3) constructor - used to perform autowiring by calling target class constructor
+
+- Auto wiring is applicable for reference type variables(not applicable for [primitive types])
+
 
 

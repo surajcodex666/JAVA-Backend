@@ -734,4 +734,50 @@ Use **Setter Injection** when a dependency is optional because it can be set aft
 - @PostConstruct --> It represents init method
 - @PreDestroy --> It represents destroy method 
 
+# Spring Annotations
+#### Annotation ==> MetaData
+- Anootations introduced in Java 1.5v
+- Annotations are alternate for xml configuration
+- We have several annotations
+1) @Configuration - To represent java class as configuration class
+2) @ComponentScan - To indentify Spring Bean classes available in the project based on "basePackageName"
+
+                 1) only in the current pkg 
+                 2) for all pkgs we need to specify 
+                 @ComponentScan(basePackages = {"pkg.suraj" , "   " , "      "})
+                 3) We can give multiple pkgs but we should follow the structure and not guve multiple pkgs
+
+3) @Component - To represent Java class as Spring bean
+
+                1) object is created by IOC
+
+4) @Service - To represent Java class as Spring bean (Business Classes)
+5) @Repository - To represent Java class as Spring bean (Persistence layer classes) [classes responsible to communicate with the database]
+6) @Scope - To represent Bean Scope
+
+                1) @Scope(value = "Prototype")
+
+7) @Autowired - To perform Dependency Injection
+
+                1) It'll indentify the dependent obj and inject it in the target obj
+                2) @Autowired
+                   private IReport report; 
+
+                   It'll check firstly byName if theres any class with report name then it'll check byType and if there are multiple classes implementing that interface the ambiguity will be there so we set @primary for that
+
+8) @Qualifier - To Perform Autowiring based on byName
+
+                1) If the bean has a name[@Component("name")] the we can use @Qualifier("name") then it'll consider that bean for autowiring 
+
+9) @Primary - To represent primary bean for autowiring
+
+                1) If we have use @Autowired and there are no classes with that name then it'll check byType and if there are multiple classes in that interface then it'll get confused and give error so for that we'll use @Primary to tell which bean we have to Autowire then that classes obj will be injected
+
+10) @Bean - To call the method whivh returns bean object
+
+                1) When we want a method to be considered as a spring bean we can use @Bean while describing the method
+                2) Obj is created by programmer
+                3) If we dont want IOC to create the obj for the class then we'll define the methods inside the class and mark it with @Bean annotation so that IOC can directly call that method and get the obj
+                4) Method lvl annotation
+
 

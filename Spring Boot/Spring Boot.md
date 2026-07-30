@@ -941,4 +941,411 @@ However, it is **not recommended** because `@Service` makes the code more readab
 - 🧠 **@Service** → Manager who decides the business rules (discounts, order validation, payment flow)
 - 🗄 **@Repository** → Clerk who stores and retrieves data from the database
 
+# application.properties vs application.yml (Spring Boot)
+
+## What are these files?
+
+Both **application.properties** and **application.yml** are configuration files used by Spring Boot.
+
+They store configuration such as:
+
+- Server Port
+- Database Configuration
+- Logging Configuration
+- Application Name
+- Security Configuration
+- Custom Properties
+
+Spring Boot automatically loads either of these files from:
+
+```
+src/main/resources
+```
+
+> **Interview Point:** Spring Boot supports both formats. You can use either one depending on your project's preference.
+
+---
+
+# 1. application.properties
+
+## Definition
+
+`application.properties` stores configuration in **key=value** format.
+
+### Example
+
+```properties
+spring.application.name=StudentManagement
+
+server.port=8080
+
+spring.datasource.url=jdbc:mysql://localhost:3306/studentdb
+
+spring.datasource.username=root
+
+spring.datasource.password=root
+
+logging.level.root=INFO
+```
+
+---
+
+## Advantages
+
+- Easy for beginners
+- Simple syntax
+- Widely used
+- Good for small projects
+
+---
+
+## Disadvantages
+
+- Difficult to read when the project grows
+- Repeated property names
+- Long configuration files
+
+---
+
+# 2. application.yml
+
+## Definition
+
+`application.yml` (YAML) stores configuration in a **hierarchical (tree-like)** format using indentation.
+
+### Example
+
+```yaml
+spring:
+  application:
+    name: StudentManagement
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/studentdb
+    username: root
+    password: root
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+```
+
+Notice how related properties are grouped together.
+
+---
+
+## Advantages
+
+- Cleaner
+- Easier to read
+- Better organization
+- Less repetition
+- Preferred in large projects
+
+---
+
+## Disadvantages
+
+- Indentation is mandatory
+- Beginners often make spacing mistakes
+
+---
+
+# Comparison
+
+| Feature | application.properties | application.yml |
+|----------|------------------------|-----------------|
+| Format | key=value | Hierarchical (YAML) |
+| Readability | Good for small files | Better for large files |
+| Repetition | More | Less |
+| Indentation | Not required | Required |
+| Learning Curve | Easy | Slightly higher |
+| Large Projects | Less preferred | Preferred |
+
+---
+
+# Example Comparison
+
+## application.properties
+
+```properties
+student.name=Suraj
+student.age=22
+student.city=Bangalore
+```
+
+---
+
+## application.yml
+
+```yaml
+student:
+  name: Suraj
+  age: 22
+  city: Bangalore
+```
+
+Both represent the **same configuration**.
+
+---
+
+# Nested Configuration Example
+
+## application.properties
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/studentdb
+
+spring.datasource.username=root
+
+spring.datasource.password=root
+```
+
+---
+
+## application.yml
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/studentdb
+    username: root
+    password: root
+```
+
+The YAML version is easier to read because related properties are grouped.
+
+---
+
+# Lists Example
+
+## application.properties
+
+```properties
+student.subjects[0]=Java
+student.subjects[1]=Spring
+student.subjects[2]=MySQL
+```
+
+---
+
+## application.yml
+
+```yaml
+student:
+  subjects:
+    - Java
+    - Spring
+    - MySQL
+```
+
+YAML is much cleaner for lists.
+
+---
+
+# Map Example
+
+## application.properties
+
+```properties
+student.marks.java=90
+student.marks.spring=95
+student.marks.mysql=88
+```
+
+---
+
+## application.yml
+
+```yaml
+student:
+  marks:
+    java: 90
+    spring: 95
+    mysql: 88
+```
+
+---
+
+# How Does Spring Boot Read Them?
+
+When the application starts:
+
+```text
+Application Starts
+        ↓
+Spring Boot Looks in
+src/main/resources
+        ↓
+Finds application.properties
+or application.yml
+        ↓
+Loads Configuration
+        ↓
+Makes Values Available
+        ↓
+@Value / @ConfigurationProperties
+```
+
+---
+
+# Can We Use Both Together?
+
+Yes.
+
+Spring Boot can load both files.
+
+However,
+
+**Best Practice:** Use only **one format** in a project to keep configuration consistent.
+
+---
+
+# Which One Should You Use?
+
+### Small Projects
+
+Use
+
+```
+application.properties
+```
+
+because it is simple.
+
+---
+
+### Large Projects
+
+Use
+
+```
+application.yml
+```
+
+because it is more organized and easier to maintain.
+
+---
+
+# Interview Questions
+
+## Q1. What is the difference between application.properties and application.yml?
+
+Both are configuration files used by Spring Boot.
+
+- `application.properties` uses **key=value** format.
+- `application.yml` uses **YAML (hierarchical)** format.
+
+---
+
+## Q2. Which one is better?
+
+For small projects:
+
+- `application.properties`
+
+For medium and large projects:
+
+- `application.yml`
+
+because it is cleaner and easier to maintain.
+
+---
+
+## Q3. Can Spring Boot read both?
+
+Yes.
+
+Spring Boot supports both formats.
+
+---
+
+## Q4. Where are these files located?
+
+```
+src/main/resources
+```
+
+---
+
+## Q5. Which file is preferred in modern Spring Boot projects?
+
+Many modern Spring Boot projects use **application.yml** because of its readability, especially when there are many nested properties. However, **application.properties** is still fully supported and widely used.
+
+---
+
+# Best Practices
+
+- Keep configuration outside Java code.
+- Use meaningful property names.
+- Do not hardcode passwords or API keys.
+- Use environment variables or secret management for sensitive values.
+- Use one configuration format consistently throughout a project.
+
+---
+
+# One-Minute Revision
+
+- Both files configure Spring Boot applications.
+- Location:
+
+```
+src/main/resources
+```
+
+- `application.properties` → key=value
+- `application.yml` → hierarchical YAML
+- YAML is cleaner for nested objects, lists, and maps.
+- Both support the same configuration options.
+- Spring Boot automatically loads them at startup.
+
+---
+
+# Easy Trick to Remember
+
+### application.properties
+
+Think of it as a **flat notebook**:
+
+```text
+Name = Suraj
+Age = 22
+City = Bangalore
+```
+
+Everything is written one line at a time.
+
+---
+
+### application.yml
+
+Think of it as a **family tree**:
+
+```text
+Student
+   ├── Name
+   ├── Age
+   └── City
+```
+
+Related information stays together, making it easier to read.
+
+---
+
+# Interview Cheat Sheet
+
+| Question | Answer |
+|----------|--------|
+| Purpose of both files? | Store Spring Boot configuration |
+| Location? | `src/main/resources` |
+| Properties format? | `key=value` |
+| YAML format? | Hierarchical with indentation |
+| Better for small projects? | `application.properties` |
+| Better for large projects? | `application.yml` |
+| Can Spring Boot read both? | Yes |
+| Recommended practice? | Use one format consistently in a project |
+
 

@@ -2039,3 +2039,564 @@ Answer:
 - Bean Lifecycle = Create → Inject → `@PostConstruct` → Ready → `@PreDestroy` → Destroy.
 - Spring Beans can be created using `@Component`, `@Service`, `@Repository`, `@Controller`, `@RestController`, or `@Bean`.
 - `@Component` is discovered automatically; `@Bean` is declared manually inside a `@Configuration` class.
+
+# @Value Annotation in Spring Boot
+
+## What is @Value?
+
+### Interview Definition
+
+`@Value` is a Spring annotation used to **inject values into Spring Beans**.
+
+These values can come from:
+
+- `application.properties`
+- `application.yml`
+- Environment Variables
+- System Properties
+- Constant Values
+- Spring Expression Language (SpEL)
+
+In simple words,
+
+> **@Value is used to inject a value into a variable.**
+
+---
+
+# Why Do We Need @Value?
+
+Suppose you have a database URL.
+
+❌ Without `@Value`
+
+```java
+public class DatabaseConfig {
+
+    String url = "jdbc:mysql://localhost:3306/studentdb";
+
+}
+```
+
+Problem:
+
+If the database URL changes,
+
+you must modify the source code and rebuild the application.
+
+---
+
+✅ With `@Value`
+
+application.properties
+
+```properties
+db.url=jdbc:mysql://localhost:3306/studentdb
+```
+
+Java Class
+
+```java
+@Component
+public class DatabaseConfig {
+
+    @Value("${db.url}")
+    private String url;
+
+}
+```
+
+Now, changing the database URL only requires updating the properties file.
+
+---
+
+# Syntax
+
+```java
+@Value("${property-name}")
+private DataType variableName;
+```
+
+Example
+
+```java
+@Value("${server.port}")
+private int port;
+```
+
+---
+
+# Example 1 : Reading Values from application.properties
+
+## application.properties
+
+```properties
+student.name=Suraj
+student.age=22
+student.city=Bangalore
+```
+
+---
+
+## Java Class
+
+```java
+@Component
+public class Student {
+
+    @Value("${student.name}")
+    private String name;
+
+    @Value("${student.age}")
+    private int age;
+
+    @Value("${student.city}")
+    private String city;
+
+}
+```
+
+Spring automatically injects
+
+```text
+name = Suraj
+
+age = 22
+
+city = Bangalore
+```
+
+---
+
+# Internal Working
+
+```text
+Application Starts
+        ↓
+application.properties Loaded
+        ↓
+Spring Reads @Value
+        ↓
+Finds Property
+        ↓
+Injects Value
+        ↓
+Bean Ready
+```
+
+---
+
+# Example 2 : Printing the Values
+
+```java
+@Component
+public class Student {
+
+    @Value("${student.name}")
+    private String name;
+
+    @Value("${student.age}")
+    private int age;
+
+    @PostConstruct
+    public void display() {
+
+        System.out.println(name);
+        System.out.println(age);
+
+    }
+
+}
+```
+
+Output
+
+```text
+Suraj
+22
+```
+
+---
+
+# Default Value
+
+Suppose the property does not exist.
+
+We can provide a default value.
+
+```java
+@Value("${student.city:Delhi}")
+private String city;
+```
+
+If
+
+```properties
+student.city
+```
+
+is missing,
+
+Output
+
+```text
+Delhi
+```
+
+---
+
+# Primitive Types
+
+```java
+@Value("${student.age}")
+private int age;
+```
+
+---
+
+# String
+
+```java
+@Value("${student.name}")
+private String name;
+```
+
+---
+
+# Boolean
+
+```java
+@Value("${student.active}")
+private boolean active;
+```
+
+---
+
+# Double
+
+```java
+@Value("${student.fees}")
+private double fees;
+```
+
+---
+
+# Inject Constant Values
+
+Instead of reading from a property file,
+
+you can inject a constant.
+
+```java
+@Value("Spring Boot")
+private String course;
+```
+
+Output
+
+```text
+Spring Boot
+```
+
+---
+
+# Reading Environment Variables
+
+Suppose
+
+Environment Variable
+
+```text
+JAVA_HOME
+```
+
+```java
+@Value("${JAVA_HOME}")
+private String javaHome;
+```
+
+---
+
+# Spring Expression Language (SpEL)
+
+`@Value` also supports **Spring Expression Language (SpEL)**.
+
+Example
+
+```java
+@Value("#{10+20}")
+private int sum;
+```
+
+Output
+
+```text
+30
+```
+
+---
+
+Another Example
+
+```java
+@Value("#{T(java.lang.Math).PI}")
+private double pi;
+```
+
+Output
+
+```text
+3.141592653589793
+```
+
+---
+
+# Common Use Cases
+
+- Database URL
+- Username
+- Password
+- Server Port
+- Email Configuration
+- API Keys
+- File Paths
+- Application Name
+
+---
+
+# Advantages
+
+- No hardcoded values
+- Easy configuration
+- Better maintainability
+- Different values for different environments
+- Cleaner code
+
+---
+
+# Limitations
+
+`@Value` works well for a few properties.
+
+If you have many related properties,
+
+Spring recommends using
+
+```java
+@ConfigurationProperties
+```
+
+because it is cleaner and easier to maintain.
+
+---
+
+# @Value vs @ConfigurationProperties
+
+| @Value | @ConfigurationProperties |
+|----------|--------------------------|
+| Single Property | Multiple Related Properties |
+| Easy to Use | Better for Large Configurations |
+| Good for Small Projects | Preferred for Large Projects |
+| Supports SpEL | Does Not Support SpEL |
+
+---
+
+# Common Mistakes
+
+## ❌ Wrong Property Name
+
+```java
+@Value("${student.nam}")
+```
+
+Property
+
+```properties
+student.name=Suraj
+```
+
+Application will fail because the property key is incorrect.
+
+---
+
+## ❌ Forgetting @Component
+
+```java
+public class Student {
+
+    @Value("${student.name}")
+    private String name;
+
+}
+```
+
+Spring will not manage this class.
+
+`@Value` will not work.
+
+Correct
+
+```java
+@Component
+public class Student {
+
+}
+```
+
+---
+
+# Real Project Example
+
+application.properties
+
+```properties
+spring.application.name=StudentManagement
+
+server.port=8080
+
+spring.datasource.url=jdbc:mysql://localhost:3306/studentdb
+
+spring.datasource.username=root
+
+spring.datasource.password=root
+```
+
+Java Class
+
+```java
+@Component
+public class DatabaseConfig {
+
+    @Value("${spring.datasource.url}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+}
+```
+
+---
+
+# Interview Questions
+
+## Q1. What is @Value?
+
+`@Value` is used to inject values from configuration files, environment variables, constants, or Spring Expression Language into Spring-managed beans.
+
+---
+
+## Q2. From where can @Value read values?
+
+- application.properties
+- application.yml
+- Environment Variables
+- System Properties
+- Constants
+- SpEL
+
+---
+
+## Q3. Can @Value inject default values?
+
+Yes.
+
+```java
+@Value("${student.city:Delhi}")
+```
+
+If the property is missing,
+
+Spring injects
+
+```text
+Delhi
+```
+
+---
+
+## Q4. Can @Value inject primitive data types?
+
+Yes.
+
+Examples
+
+```java
+int
+
+double
+
+boolean
+
+String
+
+long
+```
+
+---
+
+## Q5. Which is better for many properties?
+
+`@ConfigurationProperties`
+
+---
+
+# Best Practices
+
+- Use `@Value` for a small number of configuration values.
+- Use `@ConfigurationProperties` for groups of related properties.
+- Avoid hardcoding configuration values in Java code.
+- Store sensitive values (passwords, API keys) securely using environment variables or secret management tools instead of committing them to source control.
+
+---
+
+# One-Minute Revision
+
+- `@Value` injects values into Spring Beans.
+- Reads values from:
+  - application.properties
+  - application.yml
+  - Environment Variables
+  - System Properties
+  - Constants
+  - SpEL
+- Syntax:
+
+```java
+@Value("${property.name}")
+```
+
+- Supports default values:
+
+```java
+@Value("${city:Delhi}")
+```
+
+- Supports SpEL:
+
+```java
+@Value("#{10+20}")
+```
+
+- Best for a few properties.
+- Use `@ConfigurationProperties` for many related properties.
+
+---
+
+# Easy Trick to Remember
+
+Think of `@Value` as a **bridge** between your configuration file and your Java class.
+
+```text
+application.properties
+        │
+        ▼
+     @Value
+        │
+        ▼
+Java Variable
+```
+
+Instead of writing values directly in your code, `@Value` fetches them from the configuration and injects them automatically.

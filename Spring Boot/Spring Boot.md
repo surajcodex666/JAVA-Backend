@@ -1348,4 +1348,164 @@ Related information stays together, making it easier to read.
 | Can Spring Boot read both? | Yes |
 | Recommended practice? | Use one format consistently in a project |
 
+- properties file can be converted to yml file but vice-versa is not possible
+- it is recommended to use .yml file instead of .properties file
+
+# Spring Data JPA
+- Application contains several layers
+        1) Presentation layer(JSP / Thcmeleaf / Angular / React JS / Vue JS)
+        2) Web layer (Servlets / Struts / Spring Web MVC)
+        3) Persistence layer (JDBC / Spring JDBC / Spring ORM / Spring Data JPA)
+- Spring Data JPA is used to develop persistence layer 
+- Spring DAta JPA Provides ready made methods to perform CRUD operations in DB tables   
+
+        1) CrudRepository (Interface)
+        2) JpaRepository (Interface)
+
+### NOTE : JpaRepository = CrudRepository + Pagination Methods + Sorting Methods
+
+## Spring Data JPA Terminology
+1) Data Source Object - It Represents databse onncetions. Data Source Properties we can configure in application.properties or application.yml
+
+2) Entity Class - the class which is mapped to Database table 
+
+        - @Entity - to represent a class as entity class
+        - @Table(name="asfjaj") - to map it to a table [if we dont write @Table annotation java will take the class name as the table name by Default]
+        - @Id - to represent it as a primary key
+        - @Column(name = "STUDENT_ID") - to make it as a column
+        
+3) Repository Interface - For every table we will create repository interface to perform CRUD operation
+
+        public interface StudentRepository extenda CrudRepository<Entity, ID>{
+
+        }
+
+        NOTE - by using StudentRepository we can perform CRUD operation in STUDENT_TABLE
+
+        NOTE - for our repository interface the implementation will be provided in the runtime using Proxy Class [just create and extend that's all]
+
+4) Repository methods - Ready made methods provided by Data JPA to perform CRUD operations  
+
+        a) save - take Entity object as parameter [used to insert single record]
+        b) saveall - (Iterable<Entity> i) - multiple records at a time
+        
+        NOTE - Above two methods are called as "UPSERT"[Update & Insert] methods.
+
+        c) findById(ID id) - to retrieve data using ID
+        d) findAllById(Iterable<ID> ids) - to retrieve multiple records based on the primary keys
+        e) findAll() - to retrieve all the records available
+        f) count() - count of record
+        g) existById(ID id) - if exist true or else false
+        h) deleteById(ID id) - delete records
+        i) deleteAllById(ID id) - to delete multiple records
+        j) deleteAll() - to delete all the records
+
+5) ORM Properties - to automate some configuration
+
+        a) auto_ddl - Dynamic schema generation [if tables are not there it should be created]
+                jpa:
+                  hibernate:
+                    ddl-auto: update
+        b) show_sql - display generated queries on the console
+                  show-sql: true
+
+## First Application Development Using Spring Data JPA
+1) Create Spring Starter project with below dependencies
+
+        a) springboot-starter-data-jpa
+        b) mysql-connector   
+
+2) Create entity class and map with DB table using annotations
+
+3) Create Repository interface to perform CRUD operations
+
+4) Configure Data source Properties in application.yml file
+
+5) Run the application and test the functionality
+
+### NOTE - Default connecton pool used by the Data JPA is -> HikariPool - 1 internally
+
+### NOTE - the java class mapped to Databse table is called ENTITY
+
+## findBy(Col_name[Entity variable name]) Methods in Data JPA 
+- by using it we can retrieve the data based on non-primary key columns
+- When we write findBy(Col_name[Entity variable name]) methods, JPA will construct query based on method name
+### NOTE - Method naming convention is very Important for this
+
+        - create a abstract method with that col_name where we extend Crud_repo
+            public List<Student> findByGender(String gender);  
+        - in main class
+            List<Student> maleStudents = studentRepo.findByGender("Male");
+            maleStudents.forEach(System.out::println);
+
+- Using this we can only perform retrievals or we can say only select operations 
+
+## Custom Queries in Data JPA
+- To execute custom queries we will use @Query annotation
+- @Query will support for executing both HQL and Native SQL queries also.
+
+        HQL: Hibernate Query Language (Database Independent Queries)
+            - we will use Entity class name + Entity class variable to write Query
+            - HQL Queries will converted to SQL Queries by Dialect class for execution 
+            - so when we change app from one DB to another there is no need to change any Query because Dialect class will tkae care of query conversion
+            - poor performamce bcz of conversion[every HQL Query should be converted to SQL quesries]
+            - use when MAINTENANCE is important
+
+        SQL : Structured Query Language (Database Dependent Queries)
+            - we will use table name & column name to write the Query
+            - SQL queries will directly execute in database
+            - IF we change app from one DB to another DB then all queries may not execute
+            - better performance than HQL
+            - use when PERFORMANCE is important
+
+        @Query(value = "select * from student_dtls" , nativeQuery = true[means it is a SQL query])
+        public List<Student> getAllStudents();
+
+        @Query("from Student")[HQL query]
+        public List<Student> getStudents(); 
+
+### Queries - 
+- SQL : select * from student_dtls where student_gender = :gender
+- HQL : from Student where gender = :gender
+
+- SQL : sekect * from student_dtls where student_gender is null
+- HQL : from Student where gender is null
+
+- SQL : select * from student_dtls where student_rank >= :rank
+- HQL : from Student where student_rank >= :rank
+
+- SQL : select * from student_dtls where student_rank <= :rank
+- HQL : from Student where student_rank <= :rank
+
+- SQL : select * from student_dlts where student_gender = :gender and student_rank >= :rank
+- HQL : from Student where gender = :gender and rank >= :rank
+
+- SQL select student_rank, student_gender from student_dlts
+- HQL : select rank, gender from Student
+
+
+## Selection : 
+- Retrieving specific rows from the table. We can achieve this by using 'where' keyword in the query
+- ex: select * from student_dtls where gender = 'Male';
+
+## Projection :
+- Retrieving specific columns from the table is called as Projection. We can achieve it by using column names in query
+- ex : select student_rank, student_gender from student_dlts
+
+### NOTE : We can combine selection and projection in single query
+            ex: select student_rank, student_gender from student_dlts where student_rank <= 100;
+
+## JpaRepository      
+- It is predefimned interface provided by Spring Data JPA
+- JpaRepository provided several methods to perform CRUD operations with database.
+- JpaRepository provided few additional methods to perform operations
+        JpaRepository = CrudRepository + PagingAndSorting + QueryByExample
+
+![alt text](<Screenshot 2026-08-08 at 6.24.36 AM.png>)
+
+
+
+
+
+
 

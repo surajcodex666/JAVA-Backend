@@ -1509,9 +1509,18 @@ Related information stays together, making it easier to read.
 - ex : Gmail with Pagination (size : 50 mails per page)
 
 ![alt text](image-1.png)
+
 ![alt text](image-2.png)
 
+## Sort()
 
+![alt text](image-3.png)
+
+## QueryByExample
+- QBE is used to construct select query dynamically based on given entity object data
+
+![alt text](image-4.png)
+    
 
 
 

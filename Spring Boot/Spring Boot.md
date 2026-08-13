@@ -1508,9 +1508,9 @@ Related information stays together, making it easier to read.
 - ex : Google search will display with Pagination (size : 10)
 - ex : Gmail with Pagination (size : 50 mails per page)
 
-        ![alt text](<Screenshot 2026-08-13 at 6.45.19 AM.png>)
+![alt text](<Screenshot 2026-08-13 at 6.45.19 AM.png>)
 
-        ![alt text](<Screenshot 2026-08-13 at 6.46.56 AM.png>)
+![alt text](<Screenshot 2026-08-13 at 6.46.56 AM.png>)
 
 
 

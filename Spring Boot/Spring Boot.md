@@ -1503,6 +1503,14 @@ Related information stays together, making it easier to read.
 
 ![alt text](<Screenshot 2026-08-08 at 6.24.36 AM.png>)
 
+## Pagination 
+- Displaying table records in multiple pages is called as Pagination.
+- ex : Google search will display with Pagination (size : 10)
+- ex : Gmail with Pagination (size : 50 mails per page)
+
+        ![alt text](<Screenshot 2026-08-13 at 6.45.19 AM.png>)
+
+        ![alt text](<Screenshot 2026-08-13 at 6.46.56 AM.png>)
 
 
 

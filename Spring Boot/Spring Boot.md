@@ -1365,7 +1365,7 @@ Related information stays together, making it easier to read.
 ### NOTE : JpaRepository = CrudRepository + Pagination Methods + Sorting Methods
 
 ## Spring Data JPA Terminology
-1) Data Source Object - It Represents databse onncetions. Data Source Properties we can configure in application.properties or application.yml
+1) Data Source Object - It Represents databse conncetions. Data Source Properties we can configure in application.properties or application.yml
 
 2) Entity Class - the class which is mapped to Database table 
 
@@ -1502,6 +1502,7 @@ Related information stays together, making it easier to read.
         JpaRepository = CrudRepository + PagingAndSorting + QueryByExample
 
 ![alt text](<Screenshot 2026-08-08 at 6.24.36 AM.png>)
+
 
 
 

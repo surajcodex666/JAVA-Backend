@@ -1501,7 +1501,7 @@ Related information stays together, making it easier to read.
 - JpaRepository provided few additional methods to perform operations
         JpaRepository = CrudRepository + PagingAndSorting + QueryByExample
 
-![alt text](<Screenshot 2026-08-08 at 6.24.36 AM.png>)
+![alt text](image.png)
 
 ## Pagination 
 - Displaying table records in multiple pages is called as Pagination.

@@ -1521,7 +1521,11 @@ Related information stays together, making it easier to read.
 
 ![alt text](image-4.png)
     
-
+### NOTE 
+- if we want to perform non select operations using JPA custom query then we should use below two annotations at our method 
+        1) @Modifying - it represents that this method is performing DML operations
+        2) @Transactional - it represents that this method requires a transaction from JPA to perform this operation 
+- they are not required for select queries
 
 
 
